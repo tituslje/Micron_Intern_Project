@@ -11,7 +11,7 @@ from pptx.dml.color import RGBColor
 import seaborn as sns
 from autoscale_visualization import scale, trendline
 from export_funcs import edit_title, plot_slide, transitn_slide
-from json_create import create_json
+from json_create import create_json 
 from ksm_plot_v1 import kernel_smooth
 from sieve_outlier_anova import get_anova_score, stats, remove_outlier, get_outlier, outliers_to_json
 
@@ -23,10 +23,11 @@ from sieve_outlier_anova import get_anova_score, stats, remove_outlier, get_outl
 @profile
 def main(csv_file, ppt):  
 
+    #wafer data codes of interest (edited to ensure data confidentiality)
     interest_probes = [
-        'FINAL FUNCT PROD::WaferData::npuZQ',
-        'FINAL FUNCT PROD::WaferData::npnC',
-        'FINAL FUNCT PROD::WaferData::npmD']
+        'FINAL FUNCT PROD::WaferData::ABCD',
+        'FINAL FUNCT PROD::WaferData::DEFG',
+        'FINAL FUNCT PROD::WaferData::GHIJ']
 
     start = dt.datetime.now()
 
@@ -57,7 +58,7 @@ def main(csv_file, ppt):
         subtitle = main_slide.shapes.placeholders[25]
         subtitle.text = date.strftime("%m/%d/%Y, %H:%M:%S")
 
-        # Main page color defaults (hardcoded change when needed)
+        # Main page color defaults (hardcoded, change when needed)
         for shape in main_slide.shapes:
             if shape.shape_id == 2:
                 shape.fill.background()
@@ -79,14 +80,15 @@ def main(csv_file, ppt):
     else:
         print('Nothing')
 
-    datetime = "5450-51 SLIT RECESS WET ETCH::RunData::ProcessEndDateTime"
+    datetime = "9876-23 SLIT RECESS WET ETCH::RunData::ProcessEndDateTime" #edited to ensure data confidentiality
 
+    #load data of interested probes from existing csv
     for interest in interest_probes:
         # load data and remove NaN values, then sort them
         logger.info(f'reading csv file... {csv_file}')
         data = pd.read_csv(csv_file)
         data[datetime] = pd.to_datetime(data[datetime])
-        logger.info(f'removing NA rows...')
+        logger.info(f'removing NA rows...') 
         data = data.loc[data[datetime].notna()]
         data = data.loc[data[interest].notna()]
 
@@ -111,7 +113,7 @@ def main(csv_file, ppt):
         click.echo('CONV stats before outlier removal: [Mean, Std, Median]')
         stats(conv, interest, "before", "conv")
 
-        # kernel smooth
+        # kernel smoothing on line plots of interested probes data
         logger.info(f'kernel smoothing in progress...')
         y_kvp = kernel_smooth(por[datetime], por[interest], x_datetime=True)
         y_kvc = kernel_smooth(conv[datetime], conv[interest], x_datetime=True)
@@ -124,7 +126,7 @@ def main(csv_file, ppt):
         por['y_kvp'] = y_kvp
         conv['y_kvc'] = y_kvc
 
-        # Read outlier_json
+        # Read outlier_json containing data of outliers, determined using each data point's ANOVA scores
         # Json Data Parsing
         logger.info("outlier data parsing...")
         file_name1 = 'outliers.json'
@@ -135,13 +137,11 @@ def main(csv_file, ppt):
             click.echo('outliers.json created')
 
         # sieve outliers
-        logger.info("outlier sieving in progress...")
-        data = get_anova_score(data, interest)
-        cleaned_data = remove_outlier(data)
-        cleaned_por = cleaned_data.loc[data["porconv"] == "por"]
-        cleaned_conv = cleaned_data.loc[data["porconv"] == "conv"]
-        # cleaned_por = cleaned_por.sort_values(by=[datetime])
-        # cleaned_conv = cleaned_conv.sort_values(by=[datetime])
+        #logger.info("outlier sieving in progress...")
+        #data = get_anova_score(data, interest)
+        #cleaned_data = remove_outlier(data)
+        #cleaned_por = cleaned_data.loc[data["porconv"] == "por"]
+        #cleaned_conv = cleaned_data.loc[data["porconv"] == "conv"]
 
         # pass a json data of wafer id and lot id later from this csv, do later
         outliers = get_outlier(data)
@@ -190,21 +190,6 @@ def main(csv_file, ppt):
         runtime = (end - start).seconds
         logger.info(f'Outlier Data Parsing: {runtime}')
 
-        # kernel smooth for cleaned data
-        # logger.info(f'kernel smoothing for cleaned data in progress...')
-        # y_kvp = kernel_smooth(
-        #     por[datetime], por[interest], x_datetime=True)
-        # y_kvc = kernel_smooth(
-        #     conv[datetime], conv[interest], x_datetime=True)
-
-        # end = dt.datetime.now()
-        # runtime = (end - start).seconds
-        # logger.info(f'kernel smoothing for cleaned data: {runtime}')
-
-        # append the smoothed value to a new column for both cleaned por and conv
-        # por['y_kvp'] = y_kvp
-        # conv['y_kvc'] = y_kvc
-
         ### Autoscale Visualization ###
         logger.info(f'autoscale visualization for cleaned data in progress...')
         mean = data[datetime].mean()
@@ -222,16 +207,16 @@ def main(csv_file, ppt):
         #new = scale(new, interest)
         plt.figure(figsize=(10, 10))
         sns.set_theme()
-        scatter = sns.scatterplot(
-            data=new,
-            x=datetime,
-            y=interest,
-            hue="porconv",
-            palette=dict(
-                por="orange",
-                conv="blue"))
-        por_trend = trendline(por[datetime], por["y_kvp"], "por")
-        conv_trend = trendline(
+        #scatter = sns.scatterplot(
+        #    data=new,
+        #    x=datetime,
+        #    y=interest,
+        #    hue="porconv",
+        #    palette=dict(
+        #        por="orange",
+        #        conv="blue"))
+        #por_trend = trendline(por[datetime], por["y_kvp"], "por")
+        #conv_trend = trendline(
             conv[datetime], conv["y_kvc"], "conv")
         name_lst = interest.split('::')
         # #Create figure (png file) directory
@@ -271,16 +256,16 @@ def main(csv_file, ppt):
         new_loop = scale(new, interest)
         plt.figure(figsize=(10, 10))
         sns.set_theme()
-        scatter = sns.scatterplot(
-            data=new_loop,
-            x=datetime,
-            y=interest,
-            hue="porconv",
-            palette=dict(
-                por="orange",
-                conv="blue"))
-        por_trend = trendline(por[datetime], por["y_kvp"], "por")
-        conv_trend = trendline(
+        #scatter = sns.scatterplot(
+        #    data=new_loop,
+        #    x=datetime,
+        #    y=interest,
+        #    hue="porconv",
+        #    palette=dict(
+        #        por="orange",
+        #        conv="blue"))
+        #por_trend = trendline(por[datetime], por["y_kvp"], "por")
+        #conv_trend = trendline(
             conv[datetime], conv["y_kvc"], "conv")
         # #Create figure (png file) directory
         plot_name = name_lst[-1] + "_scaled_no-outliers_zoomed-y"
