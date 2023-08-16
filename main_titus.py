@@ -18,15 +18,10 @@ from sieve_outlier_anova import get_anova_score, stats, remove_outlier, get_outl
 
 @click.command()
 @click.argument('csv_file')
-# @click.option('--operation', required=True, type=click.Choice(['autoscale', 'porconv'], case_sensitive=False), help='Choose to autoscale visualization or porconv comparison')
-# , type=click.Choice(['1250-51 SLIT RECESS WET ETCH WEIGHT::MeasurementData::Product::MASS::DELTA_MASS - RAW_WAFER (Mean)', 'FINAL FUNCT PROD::WaferData::npnC', 'FINAL FUNCT PROD::WaferData::npmD', 'FINAL FUNCT PROD::WaferData::npuZQ']), help='Choose your variable of interest_probes[0]')
-# @click.option('--interest', required=True)
-# interest leave as it is for a while, we may plan to just plot all
-# interest variables wihtin the csv
 @click.option('--ppt/--no-ppt', default=False,
               help='Do you want to export ppt?')
 @profile
-def main(csv_file, ppt):  # removed operation and interest option for now as it's not used
+def main(csv_file, ppt):  
 
     interest_probes = [
         'FINAL FUNCT PROD::WaferData::npuZQ',
@@ -84,8 +79,6 @@ def main(csv_file, ppt):  # removed operation and interest option for now as it'
     else:
         print('Nothing')
 
-    # will update later
-    # datetime = "5450-51 SLIT RECESS WET ETCH::RunWaferData::ProcessEndDateTime"
     datetime = "5450-51 SLIT RECESS WET ETCH::RunData::ProcessEndDateTime"
 
     for interest in interest_probes:
