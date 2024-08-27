@@ -5,7 +5,7 @@ Welcome to this space, where I showcase what I and my fellow mentors have done t
 For the sake of data confidentiality, some references are changed and I was not able to obtain the entire code back from the company. However, I will still provide a concise explanation of what is the mission objective, what we had done and the intended results!
 
 A big thank you to everyone who made it possible:
-1. The PEE WET team at Micron Fab 10N for your warm encouragement during the course of my internship
+1. The PEE WET team at Micron Fab 10N for your warm encouragement during my internship
 2. Supervisor **Ong Hui Ting** for warmly welcoming me and integrating me into the team!
 3. Mentor **Darren Lou Wei Hao** for your commitment to giving me as best a mentorship as you can despite your busy schedule
 4. Fellow intern **Andrew Tatang** for contributing to the statistics portion and being my best buddy during the 3 months while coding
@@ -15,8 +15,9 @@ A big thank you to everyone who made it possible:
 To begin, do read the requirements.txt file before using the source code files! A good habit will be to use a virtual environment for version control as well.
 
 **Note: Current Python source code set is not optimized for any CSV file format, only the format that I and Andrew worked on back at Micron. Future updates coming soon by Fall 2023, so stay tuned!***
+**Disclaimer: None of the code seen here is plagiarised from my internship project for the sake of data confidentiality. What you are seeing is a slightly modified version of the original code**
 
-Without further ado, the next few sections will cover the project's brief mission objective, the key deliverables and the intended outcome!
+Without further ado, the next few sections will cover the project's brief mission objective, the key deliverables, and the intended outcome!
 
 ## Project Mission Objective
 
@@ -34,7 +35,7 @@ Most of the forework has already been completed before I came in, so the task fo
 
 As for myself, I mainly contributed the data visualisation and presentation techniques covered in files **main.py**, **autoscale_visualisation.py**, **ksm_plot_v1.py** and **export_funcs.py** using matplotlib, pandas and numpy. 
 
-In addition, I also assisted Andrew Tatang in the statistics portion outlined in files **sieve_outlier_anova.py**, with the relevant knowledge acquired from my Economics background (LETS GO US).
+In addition, I also assisted Andrew Tatang in the statistics portion outlined in files **sieve_outlier_anova.py**, with the relevant knowledge acquired from my Economics background.
 
 ## Detailed Code Description and Project Outcome (Outputs)
 
@@ -65,8 +66,6 @@ The script processes data from a CSV file, applies outlier detection, performs k
   - Performs outlier detection and data processing.
   - Generates statistical information.
 
-**Note: Current python source code set is not optimized for any csv file format, only the format that I and Andrew worked on back at Micron. Future updates coming soon by Fall 2023, so stay tuned!***
-
-# Thank you for reading, and Stay Tuned for updates!
+# Thank you for reading, and Stay Tuned for updates! Currently, this file is no longer being updated, however I do apply the skills that I have learnt to my other projects (personal and school) as well.
 
 If you would like to suggest improvements or pathways that this code can take, do contact Titus at tituslje99@gmail.com. Enquiries will also be much appreciated!
